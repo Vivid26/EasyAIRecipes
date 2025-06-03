@@ -155,7 +155,7 @@ function App() {
           <div className="favorites-list">
             {favorites.map((fav) => (
               <button
-                key={fav._id || fav.id}
+                key={fav.title}
                 className="favorite-chip"
                 onClick={() => setRecipe(fav)}
                 disabled={loadingFav}
