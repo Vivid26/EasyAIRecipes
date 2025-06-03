@@ -1,3 +1,8 @@
+from dotenv import load_dotenv
+import os
+
+load_dotenv()  # Loads variables from .env into environment
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from pymongo import MongoClient
@@ -6,7 +11,9 @@ from ollama_utils import generate_recipe
 app = Flask(__name__)
 CORS(app)
 
-client = MongoClient("mongodb://localhost:27017")
+MONGO_URI = os.getenv("MONGO_URI")
+
+client = MongoClient(MONGO_URI)
 db = client["ai_recipes"]
 favorites_collection = db["favorites"]
 
