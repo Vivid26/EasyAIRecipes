@@ -8,6 +8,9 @@ from flask_cors import CORS
 from pymongo import MongoClient
 from ollama_utils import generate_recipe
 
+from flask import send_from_directory
+
+
 app = Flask(__name__)
 CORS(app)
 
@@ -41,7 +44,18 @@ def get_favorites():
         return jsonify(favorites), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# Serve React static files (after all API routes)
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve_react(path):
+    static_folder = os.path.join(app.root_path, 'static')
+    if path != "" and os.path.exists(os.path.join(static_folder, path)):
+        return send_from_directory(static_folder, path)
+    else:
+        return send_from_directory(static_folder, 'index.html')
 
+# Comment out for production WSGI servers like gunicorn
+# if __name__ == '__main__':
+#     app.run()

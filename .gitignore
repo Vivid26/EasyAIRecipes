@@ -1,0 +1,28 @@
+# Node.js (React client)
+client/node_modules/
+client/dist/
+client/.env
+
+# Python (Flask server)
+server/__pycache__/
+server/.env
+server/static/
+server/*.pyc
+
+# General Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Environment files
+.env
+
+# VSCode settings (optional)
+.vscode/
