@@ -32,9 +32,11 @@ function App() {
     fetchFavorites();
   }, []);
 
+  const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
   const fetchFavorites = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/favorites');
+      const res = await fetch(`${API_BASE}/favorites`);
       const data = await res.json();
       setFavorites(data || []);
     } catch (err) {
@@ -50,7 +52,7 @@ function App() {
     setLoading(true); // Start loading
 
     try {
-      const response = await fetch('http://localhost:5000/api/generate', {
+      const response = await fetch(`${API_BASE}/generate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ingredients })
@@ -79,7 +81,7 @@ function App() {
 
 
     try {
-      const response = await fetch('http://localhost:5000/api/save', {
+      const response = await fetch(`${API_BASE}/save`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(recipe)
