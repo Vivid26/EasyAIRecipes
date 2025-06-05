@@ -1,17 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import RecipeShimmer from './components/RecipeShimmer';
+import { getFavorites, saveRecipe, createRecipe } from './api';
 import './App.css';
 
-function RecipeShimmer() {
-  return (
-    <div className="recipe-card shimmer">
-      <div className="shimmer-title shimmer-anim"></div>
-      <div className="shimmer-meta shimmer-anim"></div>
-      <div className="shimmer-section shimmer-anim"></div>
-      <div className="shimmer-section shimmer-anim"></div>
-      <div className="shimmer-section shimmer-anim"></div>
-    </div>
-  );
-}
 
 function App() {
   const [ingredients, setIngredients] = useState('');
@@ -32,12 +23,10 @@ function App() {
     fetchFavorites();
   }, []);
 
-  const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
   const fetchFavorites = async () => {
     try {
-      const res = await fetch(`${API_BASE}/favorites`);
-      const data = await res.json();
+      const data = await getFavorites();
       setFavorites(data || []);
     } catch (err) {
       setFavorites([]);
@@ -52,12 +41,7 @@ function App() {
     setLoading(true); // Start loading
 
     try {
-      const response = await fetch(`${API_BASE}/generate`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ingredients })
-      });
-      const data = await response.json();
+      const data = await createRecipe(ingredients);
       if (data.error) setError(data.error);
       else setRecipe(data);
     } catch (err) {
@@ -81,12 +65,7 @@ function App() {
 
 
     try {
-      const response = await fetch(`${API_BASE}/save`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(recipe)
-      });
-      const result = await response.json();
+      const result = await saveRecipe(recipe);
       if (result.message) {
         setSaved(true);
         fetchFavorites(); // Refresh favorites list

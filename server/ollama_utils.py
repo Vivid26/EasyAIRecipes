@@ -27,7 +27,7 @@ def generate_recipe(ingredients):
             capture_output=True,
             text=True,
             check=True,
-            encoding="utf-8",  # 🔥 Forces decoding with UTF-8
+            encoding="utf-8",  # Forces decoding with UTF-8
             timeout=30
         )
         if result.returncode != 0:
@@ -37,7 +37,7 @@ def generate_recipe(ingredients):
         output = result.stdout.strip()
         #print("OLLAMA OUTPUT:", repr(output))
 
-        # 🧼 Clean and extract JSON using regex
+        # Clean and extract JSON using regex
         json_match = re.search(r'\{.*\}', output, re.DOTALL)
         if json_match:
             json_data = json.loads(json_match.group())

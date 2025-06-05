@@ -124,15 +124,6 @@ Open [http://localhost:5000/](http://localhost:5000/) in your browser.
 
 ---
 
-## Deployment (Render Example)
-
-- Push your code to GitHub.
-- Set up a web service on [Render](https://render.com/).
-- Use `gunicorn app:app` as the start command.
-- Use `./build.sh` as the build command (make sure it’s executable).
-- Set environment variables in the Render dashboard.
-
----
 
 ## Scripts
 

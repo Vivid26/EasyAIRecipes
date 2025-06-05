@@ -1,14 +1,14 @@
-from dotenv import load_dotenv
-from pymongo import MongoClient
 import os
+from pymongo import MongoClient
+from dotenv import load_dotenv
 load_dotenv()  # Loads variables from .env into environment
 
 MONGO_URI = os.getenv("MONGO_URI")
 
-def connect_to_mongo():
+def get_collection():
     client = MongoClient(MONGO_URI)
-    db = client["recipeDB"]
-    return db["recipes"]
+    db = client["ai_recipes"]
+    return db["favorites"]
 
 def save_recipe(collection, recipe):
     collection.insert_one(recipe)

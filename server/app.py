@@ -1,24 +1,13 @@
-from dotenv import load_dotenv
 import os
-
-load_dotenv()  # Loads variables from .env into environment
-
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
-from pymongo import MongoClient
 from ollama_utils import generate_recipe
-
-from flask import send_from_directory
-
+from db import get_collection, save_recipe, get_favorites
 
 app = Flask(__name__)
 CORS(app)
 
-MONGO_URI = os.getenv("MONGO_URI")
-
-client = MongoClient(MONGO_URI)
-db = client["ai_recipes"]
-favorites_collection = db["favorites"]
+favorites_collection = get_collection()
 
 @app.route('/api/generate', methods=['POST'])
 def generate():
@@ -31,16 +20,16 @@ def generate():
 def save():
     data = request.json
     try:
-        favorites_collection.insert_one(data)
+        save_recipe(favorites_collection, data)
         return jsonify({"message": "Recipe saved to favorites!"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
 
 @app.route('/api/favorites', methods=['GET'])
-def get_favorites():
+def favorite_recipes():
     try:
-        favorites = list(favorites_collection.find({}, {'_id': 0}))  # Exclude MongoDB’s default _id
+        favorites = get_favorites(favorites_collection)
         return jsonify(favorites), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -57,5 +46,5 @@ def serve_react(path):
         return send_from_directory(static_folder, 'index.html')
 
 # Comment out for production WSGI servers like gunicorn
-# if __name__ == '__main__':
-#     app.run()
+if __name__ == '__main__':
+    app.run()
